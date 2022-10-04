@@ -2,7 +2,11 @@
 """
 Created on Wed Sep 14 10:47:33 2022
 
-@author: wj2002
+@author: Wei Jiang
+
+This codes are used to calculate the T2. In the codes, the 
+average curves of each echo are calculated firstly and then calculate the 
+areas of all echo.
 """
 import os
 import numpy as np

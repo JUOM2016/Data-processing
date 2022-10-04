@@ -2,7 +2,11 @@
 """
 Created on Wed Sep 21 17:41:15 2022
 
-@author: wj2002
+@author: Wei Jiang
+
+This codes are used to calculate the T2. In the codes, the 
+area of each echo is calculated firstly and then average the 
+areas of all echo.
 """
 #%%
 import os
@@ -14,7 +18,6 @@ import sys
 from scipy.integrate import simpson
 from scipy.optimize import curve_fit
 
-plt.close()
 # Directory and folder for data
 dir = 'C:\\Users\\wj2002\\Dropbox (Heriot-Watt University Team)\\RES_EPS_Quantum_Photonics_Lab\\Experiments\\Current Experiments\\Broadband telecom quantum memories\\Pr_YSO_spectroscopy_HWU\\20220921_Pr_YSO_T2_L'
 folder = 'T292108'
@@ -55,16 +58,15 @@ data_background_ave=np.empty(steps*ave)
 Trigger_pos=np.empty([2,data_file_len])
 pulses_pos=np.empty([4,data_file_len])
 
-
+# Define the fitting fuction
 def TPE(x,y0,T2):
     return y0*np.exp(-4*x/T2)
 
-#def TPE(x,T2):
-#    return np.exp(-4*x/T2)
-
+# Set up the time range for data processing
 time_offset_left=10
 time_offset_right=180
 
+# Values for finding the trigger, pi pulse, and pi/2 pulses
 trigger_val = 1.5
 pulses_val = 0.007
     
@@ -78,6 +80,7 @@ for index, file in enumerate(list_csv):
     data_trigger[:,index]=data[:,1]
     data_trigger_1=data[:,1]
     
+    # Finding the trigger signal 
     mask1 = (data_trigger_1[:-1] < trigger_val) & (data_trigger_1[1:] > trigger_val)
     mask2 = (data_trigger_1[:-1] > trigger_val) & (data_trigger_1[1:] < trigger_val)
     Trigger_pos[:,index]=np.flatnonzero(mask1 | mask2)+1
@@ -91,7 +94,6 @@ for index, file in enumerate(list_csv):
     data_echo_corrected[:,index]=data_echo[:,index]-data_background_ave[index]
     data_echo_corrected_1=data_echo_corrected[:,index]
     
-
     mask3 = (data_echo_corrected_1[:-1] < pulses_val) & (data_echo_corrected_1[1:] > pulses_val)
     mask4 = (data_echo_corrected_1[:-1] > pulses_val) & (data_echo_corrected_1[1:] < pulses_val)
     pulses_pos=np.flatnonzero(mask3 | mask4)+1

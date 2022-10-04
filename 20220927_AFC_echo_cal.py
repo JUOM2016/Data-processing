@@ -2,7 +2,9 @@
 """
 Created on Tue Sep 27 21:58:19 2022
 
-@author: wj2002
+@author: Wei Jiang
+
+This codes are used to quickly calculate AFC echo
 """
 #%%
 import os
@@ -10,7 +12,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.integrate import simpson
-
 
 # Directory and folder for data
 dir = 'C:\\Users\\wj2002\\Dropbox (Heriot-Watt University Team)\\RES_EPS_Quantum_Photonics_Lab\\Experiments\\Current Experiments\\Broadband telecom quantum memories\\Pr_YSO_spectroscopy_HWU'
@@ -29,6 +30,7 @@ data_trigger=data[:,1]
 ref=read_ref.to_numpy()
 ref_trigger=ref[:,1]
 
+# Show the raw data
 figure,ax=plt.subplots()
 ax1 = ax.twinx()
 ax.plot(data[:,0],data[:,2],'r')
