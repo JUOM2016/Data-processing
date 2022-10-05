@@ -151,3 +151,4 @@ AFC_echo_area=simpson(data_echo_int_corrected,data_echo_time_int)
 AFC_efficiency=100*AFC_echo_area/ref_input_area
 
 print('AFC efficiency is', AFC_efficiency,'%')
+test=1
