@@ -33,14 +33,32 @@ ref_trigger=ref[:,1]
 # Show the raw data
 figure,ax=plt.subplots()
 ax1 = ax.twinx()
-ax.plot(data[:,0],data[:,2],'r')
-ax1.plot(data[:,0],data[:,3],'b')
+p1, = ax.plot(data[:,0],data[:,2],'r', label='AFC echo')
+p2, = ax1.plot(data[:,0],data[:,3],'b', label='Reflected reference')
+
+ax.set_xlabel("Time (s)")
+ax.set_ylabel("AFC echo amplitude (V)")
+ax1.set_ylabel("Reflected reference amplitude (V)")
+ax.yaxis.label.set_color(p1.get_color())
+ax1.yaxis.label.set_color(p2.get_color())
+ax.tick_params(axis='y', colors=p1.get_color())
+ax1.tick_params(axis='y', colors=p2.get_color())
+ax.legend(handles=[p1, p2])
 plt.show()
 
 figure,ax=plt.subplots()
 ax1 = ax.twinx()
-ax.plot(ref[:,0],ref[:,2],'r')
-ax1.plot(ref[:,0],ref[:,3],'b')
+p1, = ax.plot(ref[:,0],ref[:,2],'r', label='Input Gaussian pulse')
+p2, = ax1.plot(ref[:,0],ref[:,3],'b',label='Reflected reference')
+
+ax.set_xlabel("Time (s)")
+ax.set_ylabel("Input Gaussian pulse amplitude (V)")
+ax1.set_ylabel("Reflected reference amplitude (V)")
+ax.yaxis.label.set_color(p1.get_color())
+ax1.yaxis.label.set_color(p2.get_color())
+ax.tick_params(axis='y', colors=p1.get_color())
+ax1.tick_params(axis='y', colors=p2.get_color())
+ax.legend(handles=[p1, p2])
 plt.show()
 
 #%%
@@ -65,14 +83,32 @@ ref_reflection_signal=ref[int(ref_trigger_pos[0]):int(ref_trigger_pos[0])+offset
 
 figure,ax=plt.subplots()
 ax1 = ax.twinx()
-ax.plot(data_time,data_echo,'r')
-ax1.plot(data_time,data_reflection_signal,'b')
+p1, = ax.plot(data_time,data_echo,'r', label='AFC echo')
+p2, = ax1.plot(data_time,data_reflection_signal,'b', label='Reflected reference')
+
+ax.set_xlabel("Time (s)")
+ax.set_ylabel("AFC echo amplitude (V)")
+ax1.set_ylabel("Reflected reference amplitude (V)")
+ax.yaxis.label.set_color(p1.get_color())
+ax1.yaxis.label.set_color(p2.get_color())
+ax.tick_params(axis='y', colors=p1.get_color())
+ax1.tick_params(axis='y', colors=p2.get_color())
+ax.legend(handles=[p1, p2])
 plt.show()
 
 figure,ax=plt.subplots()
 ax1 = ax.twinx()
-ax.plot(ref_time,ref_echo,'r')
-ax1.plot(ref_time,ref_reflection_signal,'b')
+p1, = ax.plot(ref_time,ref_echo,'r',label='Input Gaussian pulse')
+p2, = ax1.plot(ref_time,ref_reflection_signal,'b',label='Reflected reference')
+
+ax.set_xlabel("Time (s)")
+ax.set_ylabel("Input Gaussian pulse amplitude (V)")
+ax1.set_ylabel("Reflected reference amplitude (V)")
+ax.yaxis.label.set_color(p1.get_color())
+ax1.yaxis.label.set_color(p2.get_color())
+ax.tick_params(axis='y', colors=p1.get_color())
+ax1.tick_params(axis='y', colors=p2.get_color())
+ax.legend(handles=[p1, p2])
 plt.show()
 
 #%%
@@ -90,7 +126,8 @@ ref_pulse_time_int=ref[ref_pulse_left_pos:ref_pulse_right_pos,0]
 ref_pulse_int=ref[ref_pulse_left_pos:ref_pulse_right_pos,2]
 
 figure,ax=plt.subplots()
-ax.plot(ref_pulse_time_int,ref_pulse_int,'r')
+ax.plot(ref_pulse_time_int,ref_pulse_int,'g',label='Input Gaussian pulse')
+ax.legend()
 plt.show()
 
 ref_pulse_int_corrected=ref_pulse_int-ref_background_ave
@@ -104,7 +141,8 @@ data_echo_time_int=data[data_echo_left_pos:data_echo_right_pos,0]
 data_echo_int=data[data_echo_left_pos:data_echo_right_pos,2]
 
 figure,ax=plt.subplots()
-ax.plot(data_echo_time_int,data_echo_int,'r')
+ax.plot(data_echo_time_int,data_echo_int,'m',label='Averaged AFC echo')
+ax.legend()
 plt.show()
 
 data_echo_int_corrected=data_echo_int-data_background_ave
@@ -113,4 +151,3 @@ AFC_echo_area=simpson(data_echo_int_corrected,data_echo_time_int)
 AFC_efficiency=100*AFC_echo_area/ref_input_area
 
 print('AFC efficiency is', AFC_efficiency,'%')
-# %%
