@@ -22,9 +22,10 @@ show_plot=0
 #folder_list=[ f.path for f in os.scandir(path) if f.is_dir() ]
 num_of_subfolders=np.size(sub_folders)
 
-input_power=[1.56, 1.16, 0.84, 0.60, 0.41] # unit:mW
-pi_pulse_duation=[1.8e-6,2.2e-6,2.8e-6,3.2e-6,4.7e-6]
-tau_0=[5e-6, 5e-6, 7e-6, 8e-6, 11e-6]
+input_power=np.array([1.56, 1.16, 0.84, 0.60, 0.41]) # unit:mW
+pi_pulse_duation=np.array([1.8e-6,2.2e-6,2.8e-6,3.2e-6,4.7e-6])
+tau_0=np.array([5e-6, 5e-6, 7e-6, 8e-6, 11e-6])
+OD=np.array([0.64275,0.488, 0.49869, 0.39245, 0.43528])
 
 tau_step=2e-6
 echo_reading_width=3e-6
@@ -131,15 +132,14 @@ for index_0 in range(num_of_subfolders):
         while jj<ave:
             data_echo_area[jj,index_0]=echo_area[ii+(jj)*steps,index_0]
             jj=jj+1  
-        data_echo_area_ave[ii,index_0]=np.sum(data_echo_area)/ave
+        data_echo_area_ave[ii,index_0]=np.sum(data_echo_area[:,index_0])/ave
     
         kk=0
         while kk<ave:
             data_echo_SD_0[kk,index_0]=np.square(echo_area[ii+(kk)*steps,index_0]-data_echo_area_ave[ii,index_0])
             kk=kk+1
-            test=0
     
-        data_echo_SD[ii,index_0]=np.sqrt(np.sum(data_echo_SD_0)/(ave-1))
+        data_echo_SD[ii,index_0]=np.sqrt(np.sum(data_echo_SD_0[:,index_0])/(ave-1))
         data_echo_error[ii,index_0]=data_echo_SD[ii,index_0]/np.sqrt(ave)
         
         data_time_plot=data_time[index_0,int(Trigger_pos[index_0,0,0])-time_offset_left:int(Trigger_pos[index_0,1,0])+time_offset_right,ii]
@@ -150,11 +150,45 @@ test=0
 # %%
 T2_fit=np.empty(num_of_subfolders)
 T2_err_true=np.empty(num_of_subfolders)
+T2_fit_amp=np.empty(num_of_subfolders)
 for index_0 in range(num_of_subfolders):
     T2_fit_0,T2_err=curve_fit(TPE, tau_plot[:,index_0], data_echo_area_ave[:,index_0], p0=[1e-9,50e-6],sigma=data_echo_error[:,index_0])
     T2_fit[index_0]=T2_fit_0[1]
+    T2_fit_amp[index_0]=T2_fit_0[0]
     T2_err_true_0=np.sqrt(np.diag(T2_err))
     T2_err_true[index_0]=T2_err_true_0[1]
     print('fitted T2 =', T2_fit[index_0]*1e6, 'us')
     print('fitted T2 error =', T2_err_true[index_0]*1e6, 'us')
+# %%
+for index_0 in range(num_of_subfolders):
+    fig, ax=plt.subplots()
+    ax.errorbar(tau_plot[:,index_0]*1e6, data_echo_area_ave[:,index_0], yerr=data_echo_error[:,index_0],fmt="sr")
+    xx=np.arange(4e-6,70e-6,10e-7)
+    T2_fit_curve=T2_fit_amp[index_0]*np.exp(-4*xx/T2_fit[index_0])
+    ax.plot(xx*1e6,T2_fit_curve,'b--',label='\u03C0 pulse duration='+"{:.2f}".format(pi_pulse_duation[index_0]*1e6)+' \u03BCs')
+    ax.legend(handlelength=2)
+    ax.set_xlabel('\u03C4 (\u03BCs)')
+    ax.set_ylabel('Echo area')
+    ax.annotate('Input power ='+"{:.2f}".format(input_power[index_0])+' mW',
+            xy=(1, 0.5), xycoords='axes fraction',
+            xytext=(-20, 20), textcoords='offset pixels',
+            horizontalalignment='right',
+            verticalalignment='bottom')
+    ax.annotate('Fitted T2 ='+"{:.2f}".format(T2_fit[index_0]*1e6)+' \u03BCs',
+            xy=(1, 0.4), xycoords='axes fraction',
+            xytext=(-20, 20), textcoords='offset pixels',
+            horizontalalignment='right',
+            verticalalignment='bottom')
+    ax.annotate('Fitted T2 error ='+"{:.2f}".format(T2_err_true[index_0]*1e6)+' \u03BCs',
+            xy=(1, 0.3), xycoords='axes fraction',
+            xytext=(-20, 20), textcoords='offset pixels',
+            horizontalalignment='right',
+            verticalalignment='bottom')
+    plt.show()
+# %%
+exc_int=input_power*1e-3*OD/(2*pi_pulse_duation/3)
+fig, ax=plt.subplots()
+ax.errorbar(exc_int, T2_fit*1e6, yerr=T2_err_true*1e6,fmt="co")
+ax.set_xlabel('P (\u03BCW)XOD/t(\u03BCs)')
+ax.set_ylabel('T2 (\u03BCs)')
 # %%
