@@ -116,7 +116,11 @@ for index, file in enumerate(list_csv):
 plt.figure()
 for index in range(len(data_background_ave)):
     plt.plot(data_time[(int(Trigger_pos[1,index])+time_offset_right):,index],data_echo[(int(Trigger_pos[1,index])+time_offset_right):,index])
-    #plt.show()
+    plt.xlabel('Time (s)')
+    plt.ylabel('Amplitude (V)')
+    plt.title('Background')
+
+
 #%%
 data_echo_area=np.empty([steps])
 data_echo_area_ave=np.empty([ave])
@@ -178,3 +182,4 @@ ax.annotate('Fitted T2 error ='+"{:.2f}".format(T2_err_true[1]*1e6)+' \u03BCs',
             horizontalalignment='right',
             verticalalignment='bottom')
 plt.show()
+# %%
