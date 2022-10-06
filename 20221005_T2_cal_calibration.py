@@ -111,6 +111,7 @@ for index_0, file_0 in enumerate(sub_folders):
             plt.show()
 
 #%%
+#Plot selected background curves
 for index_0 in range(num_of_subfolders):
     plt.figure()
     for index_2 in range(len(data_background_ave)):
@@ -188,7 +189,9 @@ for index_0 in range(num_of_subfolders):
 # %%
 exc_int=input_power*1e-3*OD/(2*pi_pulse_duation/3)
 fig, ax=plt.subplots()
-ax.errorbar(exc_int, T2_fit*1e6, yerr=T2_err_true*1e6,fmt="co")
+
+ax.errorbar(exc_int, T2_fit*1e6, yerr=T2_err_true*1e6,c='tab:orange',fmt='o',alpha=0.5,linewidth=2, capsize=6)
 ax.set_xlabel('P (\u03BCW)XOD/t(\u03BCs)')
 ax.set_ylabel('T2 (\u03BCs)')
+plt.show()
 # %%
