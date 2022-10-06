@@ -1,6 +1,10 @@
 """
 Author: Wei Jiang
 Date: 2022/10/05 11:50am
+
+This codes are used to calculate the T2. In the codes, the 
+area of each echo is calculated firstly and then average the 
+areas of all echo.
 """
 #%%
 import os
