@@ -153,6 +153,7 @@ for index_0 in range(num_of_subfolders):
 
 test=0
 # %%
+# Calculate fitted T2 values and errors
 T2_fit=np.empty(num_of_subfolders)
 T2_err_true=np.empty(num_of_subfolders)
 T2_fit_amp=np.empty(num_of_subfolders)
@@ -165,6 +166,7 @@ for index_0 in range(num_of_subfolders):
     print('fitted T2 =', T2_fit[index_0]*1e6, 'us')
     print('fitted T2 error =', T2_err_true[index_0]*1e6, 'us')
 # %%
+# Plot measured echo areas and then do the fitting
 for index_0 in range(num_of_subfolders):
     fig, ax=plt.subplots()
     ax.errorbar(tau_plot[:,index_0]*1e6, data_echo_area_ave[:,index_0], yerr=data_echo_error[:,index_0],fmt="sr")
@@ -198,4 +200,3 @@ ax.errorbar(exc_int, T2_fit*1e6, yerr=T2_err_true*1e6,c='tab:orange',fmt='o',alp
 ax.set_xlabel('P (\u03BCW)XOD/t(\u03BCs)')
 ax.set_ylabel('T2 (\u03BCs)')
 plt.show()
-# %%
