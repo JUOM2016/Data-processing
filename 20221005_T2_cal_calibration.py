@@ -200,3 +200,4 @@ ax.errorbar(exc_int, T2_fit*1e6, yerr=T2_err_true*1e6,c='tab:orange',fmt='o',alp
 ax.set_xlabel('P (\u03BCW)XOD/t(\u03BCs)')
 ax.set_ylabel('T2 (\u03BCs)')
 plt.show()
+test=1
