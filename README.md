@@ -1,4 +1,5 @@
 # Data-processing
+The codes are used to process scientific data in HWU
 
 Virtual enviroment is created:
 .venv_data_processing 
