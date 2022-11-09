@@ -8,6 +8,7 @@ This codes are used to calculate the T2. In the codes, the
 average curves of each echo are calculated firstly and then calculate the 
 areas of all echo.
 """
+#%%
 import os
 import numpy as np
 import pandas as pd
@@ -19,7 +20,7 @@ from scipy.optimize import curve_fit
 
 # Directory and folder for data
 dir = 'C:\\Users\\wj2002\\Dropbox (Heriot-Watt University Team)\\RES_EPS_Quantum_Photonics_Lab\\Experiments\\Current Experiments\\Broadband telecom quantum memories\\Pr_YSO_spectroscopy_HWU\\20220921_Pr_YSO_T2_L'
-folder = 'T292105'
+folder = 'T292104'
 
 input_power=1.16 # unit:mW
 pi_pulse_duation=2.2e-6
@@ -35,7 +36,7 @@ path = dir + '\\' + folder + '\\'
 file_list = os.listdir(path)
 
 show_individual_plot=0
-show_average_plot=0
+show_average_plot=1
 
 # Listing all .csv files but not all data fies will be used in some cases
 list_csv=natsorted([i for i in file_list if i.endswith('.CSV')])
@@ -111,7 +112,7 @@ for index in range(len(data_background_ave)):
 data_len_echo=int((Trigger_pos[1,0]+time_offset_right)-(Trigger_pos[0,0]-time_offset_left))
 data_echo_sum=np.empty([data_len_echo,steps])
 data_echo_ave=np.empty([data_len_echo,steps])
-
+#%%
 for ii in range(steps):
     data_echo_first=data_echo_corrected[int(Trigger_pos[0,0])-time_offset_left:int(Trigger_pos[1,0])+time_offset_right,ii]
     #data_echo_first=data_echo[:,ii]
